@@ -1,0 +1,21 @@
+<launch>
+    <arg name="robot_type" default="$(env ROBOT_TYPE)" doc="Robot type [standard, hero, engineer]"/>
+    <arg name="action" default="true"/>
+    <arg name="odom_tf" default="false"/>
+
+    <rosparam file="$(find rc_config)/config/rc_controllers/$(arg robot_type).yaml" command="load"/>
+
+    <node name="controller_loader" pkg="controller_manager" type="controller_manager" output="screen"
+          args="spawn
+          controllers/joint_state_controller
+          controllers/action_controller
+          controllers/chassis_controller
+          "/>
+
+    <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"
+          respawn="false" output="screen">
+    </node>
+
+    <node if="$(arg odom_tf)" pkg="tf2_ros" type="static_transform_publisher" name="odom_tf_publisher"
+          args="0 0 0 0 0 0 1 map odom"/>
+</launch>
