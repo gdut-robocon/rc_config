@@ -8,27 +8,51 @@ controllers:
 
   chassis_controller:
     # ChassisBase
-    type: chassis_controllers/OmniController
+    type: chassis_controllers/SwerveController
+    wheel_track: 0.3
+    wheel_base: 0.3
+    wheel_radius: 0.054
     publish_rate: 100
     timeout: 0.1
     pid_follow: { p: 5.0, i: 0, d: 0.3, i_max: 0.0, i_min: 0.0, antiwindup: true, publish_state: true }
-    # OmniController
-    wheels:
-      front:
-        pose: [ 0.0, 0.358, 0.0 ] # x y beta
-        joint: front_wheel_joint
-        <<: &wheel_setting
-          roller_angle: 0.
-          radius: 0.07625
-          pid: { p: 0.6, i: 0, d: 0.0, i_max: 0.0, i_min: 0.0, antiwindup: true, publish_state: true }
-      left:
-        pose: [ -0.31, -0.179, 2.094 ]
-        joint: left_wheel_joint
-        <<: *wheel_setting
-      right:
-        pose: [ 0.31, -0.179, -2.094 ]
-        joint: right_wheel_joint
-        <<: *wheel_setting
+    # SwerveController
+    modules:
+      left_front:
+        position: [ 0.15, 0.15 ]
+        pivot:
+          joint: left_front_pivot_joint
+          <<: &pivot_setting
+            offset: 0.
+            pid: { p: 0.5, i: 0.5, d: 0, i_clamp_max: 0.4, i_clamp_min: -0.4, antiwindup: true, publish_state: true }
+        wheel:
+          joint: left_front_wheel_joint
+          <<: &wheel_setting
+            radius: 0.054
+            pid: { p: 0.5, i: 0.1, d: 0.0, i_max: 0.0, i_min: 0.0, antiwindup: true, publish_state: true }
+      right_front:
+        position: [ 0.15, -0.15 ]
+        pivot:
+          joint: right_front_pivot_joint
+          <<: *pivot_setting
+        wheel:
+          joint: right_front_wheel_joint
+          <<: *wheel_setting
+      left_back:
+        position: [ -0.15, 0.15 ]
+        pivot:
+          joint: left_back_pivot_joint
+          <<: *pivot_setting
+        wheel:
+          joint: left_back_wheel_joint
+          <<: *wheel_setting
+      right_back:
+        position: [ -0.15, -0.15 ]
+        pivot:
+          joint: right_back_pivot_joint
+          <<: *pivot_setting
+        wheel:
+          joint: right_back_wheel_joint
+          <<: *wheel_setting
 
   action_controller:
     type: action_controller/Controller

@@ -1,26 +1,54 @@
 rc_hw:
   bus:
     - can0
+    - can1
   loop_frequency: 1000
   cycle_time_error_threshold: 0.001
   thread_priority: 95
   # Configurations of the actuators
   actuators:
-    front_wheel_motor:
+    left_front_wheel_motor:
+      bus: can1
+      id: 0x201
+      type: rm_3508
+      lp_cutoff_frequency: 60
+    left_back_wheel_motor:
+      bus: can1
+      id: 0x202
+      type: rm_3508
+      lp_cutoff_frequency: 60
+    left_front_pivot_motor:
+      bus: can1
+      id: 0x207
+      type: rm_6020
+      lp_cutoff_frequency: 60
+    left_back_pivot_motor:
+      bus: can1
+      id: 0x208
+      type: rm_6020
+      lp_cutoff_frequency: 60
+    right_front_wheel_motor:
       bus: can0
       id: 0x201
       type: rm_3508
       lp_cutoff_frequency: 60
-    left_wheel_motor:
+    right_back_wheel_motor:
       bus: can0
       id: 0x202
       type: rm_3508
       lp_cutoff_frequency: 60
-    right_wheel_motor:
+    right_front_pivot_motor:
       bus: can0
-      id: 0x203
-      type: rm_3508
+      id: 0x207
+      type: rm_6020
       lp_cutoff_frequency: 60
+    right_back_pivot_motor:
+      bus: can0
+      id: 0x208
+      type: rm_6020
+      lp_cutoff_frequency: 60
+
+
   actions:
     location_action: # action names
       serial_port: "/dev/ttyUSB0"
